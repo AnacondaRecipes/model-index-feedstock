@@ -6,7 +6,15 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/model-index-{{ version }}.tar.gz
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: 2f9870200f3b00813881b07b90d2c67291663534e43915c75fe476b6977bf2ad
+    patches:
+      - 0001-write-deps-from-missing-file.patch
+  - url: https://raw.githubusercontent.com/paperswithcode/model-index/main/LICENSE
+    sha256: addec7ad58188c4d6df6f578fb0c6877bd799d787ecbd9f133213de995b345a4
+  - git_url: https://github.com/paperswithcode/model-index
+    git_rev: 09c7865ab2cbe00827d3af879a2faf7d286cb1b7
+    folder: github_repo
 
 build:
   noarch: python
@@ -16,6 +24,9 @@ build:
     - mi = modelindex.__main__:cli
 
 requirements:
+  build:
+    - patch  # [not win]
+    - m2-patch  # [win]
   host:
     - python
     - pip
@@ -32,12 +43,14 @@ requirements:
 
 test:
   source_files:
-    - tests
+    - github_repo/tests
   imports:
     - modelindex
   commands:
     - pip check
-    - pytest tests
+    # skipping one test because of missing test file
+    - cd github_repo
+    - pytest -k "not test_examples" tests
   requires:
     - pip
     - pytest
