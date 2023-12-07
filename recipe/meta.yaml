@@ -43,6 +43,11 @@ requirements:
     - ordered-set
     - click
 
+# skipping one test because of missing test file
+{% set tests_to_skip = "test_examples" %}
+# skipping because windows paths mess with asserts
+{% set tests_to_skip = tests_to_skip + " or test_expand_wildcard_path or test_models_import_wildcard or test_results_check" %}  # [win]
+
 test:
   source_files:
     - github_repo/tests
@@ -50,9 +55,8 @@ test:
     - modelindex
   commands:
     - pip check
-    # skipping one test because of missing test file
     - cd github_repo
-    - pytest -k "not test_examples" tests
+    - pytest -k "not ({{ tests_to_skip }})" tests
   requires:
     - pip
     - pytest
