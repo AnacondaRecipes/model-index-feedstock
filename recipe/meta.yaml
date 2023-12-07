@@ -17,7 +17,6 @@ source:
     folder: github_repo
 
 build:
-  noarch: python
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   number: 0
   entry_points:
@@ -27,6 +26,7 @@ requirements:
   build:
     - patch  # [not win]
     - m2-patch  # [win]
+    - git
   host:
     - python
     - pip
@@ -34,6 +34,8 @@ requirements:
     - markdown
     - ordered-set
     - click
+    - wheel
+    - setuptools
   run:
     - python
     - pyyaml
