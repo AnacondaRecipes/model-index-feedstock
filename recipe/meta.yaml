@@ -55,6 +55,7 @@ test:
     - modelindex
   commands:
     - pip check
+    - mi --help
     - cd github_repo
     - pytest -k "not ({{ tests_to_skip }})" tests
   requires:
