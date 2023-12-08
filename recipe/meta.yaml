@@ -73,7 +73,7 @@ about:
     convenient for you - as JSONs, YAMLs or as annotations inside markdown. model-index provides a convenient way to
     collect all this metadata into a single file that's browsable, searchable and comparable.
   license: MIT
-  license_file: LICENSE
+  license_file: github_repo/LICENSE
   license_family: MIT
   doc_url: https://github.com/paperswithcode/model-index
   dev_url: https://github.com/paperswithcode/model-index
