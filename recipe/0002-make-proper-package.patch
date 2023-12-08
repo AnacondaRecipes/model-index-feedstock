@@ -1,0 +1,11 @@
+--- setup.py	2023-12-08 12:57:31.487425099 +0100
++++ setup.py	2023-12-08 14:02:08.539366315 +0100
+@@ -20,7 +20,7 @@
+     url=url,
+     platforms=["Windows", "POSIX", "MacOSX"],
+     license="MIT",
+-    packages=find_packages(),
++    find_packages(include=['modelindex*']),
+     install_requires=['pyyaml', 'markdown', 'ordered-set', 'click'],
+     entry_points="""
+         [console_scripts]
