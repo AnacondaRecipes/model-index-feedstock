@@ -5,7 +5,7 @@
      platforms=["Windows", "POSIX", "MacOSX"],
      license="MIT",
 -    packages=find_packages(),
-+    find_packages(include=['modelindex*']),
++    packages=find_packages(include=['modelindex*']),
      install_requires=['pyyaml', 'markdown', 'ordered-set', 'click'],
      entry_points="""
          [console_scripts]
