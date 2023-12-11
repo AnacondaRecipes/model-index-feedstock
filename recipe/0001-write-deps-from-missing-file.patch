@@ -1,0 +1,11 @@
+--- setup.py	2023-12-06 19:43:46.236431069 +0100
++++ setup.py	2023-12-06 19:41:10.478374088 +0100
+@@ -21,7 +21,7 @@
+     platforms=["Windows", "POSIX", "MacOSX"],
+     license="MIT",
+     packages=find_packages(),
+-    install_requires=open("requirements.txt").read().splitlines(),
++    install_requires=['pyyaml', 'markdown', 'ordered-set', 'click'],
+     entry_points="""
+         [console_scripts]
+         mi=modelindex.__main__:cli

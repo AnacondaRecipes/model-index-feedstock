@@ -6,49 +6,79 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/model-index-{{ version }}.tar.gz
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
     sha256: 2f9870200f3b00813881b07b90d2c67291663534e43915c75fe476b6977bf2ad
-  - url: https://raw.githubusercontent.com/paperswithcode/model-index/main/LICENSE
-    sha256: addec7ad58188c4d6df6f578fb0c6877bd799d787ecbd9f133213de995b345a4
-  - url: https://raw.githubusercontent.com/paperswithcode/model-index/main/requirements.txt
-    sha256: 8356928a01bcda562a9d2a8168997db018e4c803b43ad9c6d1e137f80ca95759
+    patches:
+      - 0001-write-deps-from-missing-file.patch
+      - 0002-make-proper-package.patch
+  - git_url: https://github.com/paperswithcode/model-index
+    git_rev: 09c7865ab2cbe00827d3af879a2faf7d286cb1b7
+    folder: github_repo
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   number: 0
   entry_points:
     - mi = modelindex.__main__:cli
 
 requirements:
+  build:
+    - patch  # [not win]
+    - m2-patch  # [win]
+    - git  # [not win]
   host:
-    - python >=3.7
+    - python
     - pip
     - pyyaml
     - markdown
     - ordered-set
     - click
+    - wheel
+    - setuptools
   run:
-    - python >=3.7
+    - python
     - pyyaml
     - markdown
     - ordered-set
     - click
 
+# skipping one test because of missing test file
+{% set tests_to_skip = "test_examples" %}
+# skipping because windows paths mess with asserts
+{% set tests_to_skip = tests_to_skip + " or test_expand_wildcard_path or test_models_import_wildcard or test_results_check" %}  # [win]
+
 test:
+  source_files:
+    - github_repo/tests
   imports:
     - modelindex
   commands:
     - pip check
+    - mi --help
+    - cd github_repo
+    - pytest -k "not ({{ tests_to_skip }})" tests
   requires:
     - pip
+    - pytest
 
 about:
   home: https://github.com/paperswithcode/model-index
   summary: Create a source of truth for ML model results and browse it on Papers with Code
+  description: |
+    model-index has two goals:
+      * Make it easy to maintain a source-of-truth index of Machine Learning model metadata
+      * Enable the community browse this model metadata on Papers with Code
+    The main design principle of model-index is flexibility. You can store your model metadata however is the most
+    convenient for you - as JSONs, YAMLs or as annotations inside markdown. model-index provides a convenient way to
+    collect all this metadata into a single file that's browsable, searchable and comparable.
   license: MIT
-  license_file: LICENSE
+  license_file: github_repo/LICENSE
+  license_family: MIT
+  doc_url: https://github.com/paperswithcode/model-index
+  dev_url: https://github.com/paperswithcode/model-index
 
 extra:
   recipe-maintainers:
     - giswqs
+  skip-lints:
+    - host_section_needs_exact_pinnings
