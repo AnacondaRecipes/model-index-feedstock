@@ -1,4 +1,5 @@
 anaconda_config_version: 1
 upstream_sources:
-  - pypi:
-      identifier: model-index
+  - git:
+      identifier: https://github.com/paperswithcode/model-index
+      use_commit: true
