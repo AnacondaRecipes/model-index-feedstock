@@ -17,14 +17,12 @@ source:
 
 build:
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
-  number: 0
+  number: 1
   entry_points:
     - mi = modelindex.__main__:cli
 
 requirements:
   build:
-    - patch  # [not win]
-    - m2-patch  # [win]
     - git  # [not win]
   host:
     - python
